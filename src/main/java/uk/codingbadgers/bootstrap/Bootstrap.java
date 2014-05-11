@@ -31,9 +31,12 @@ public class Bootstrap {
     private BootstrapState state;
     private Map<DownloadType, Set<Download>> downloads = new HashMap<>();
     private File installerFile;
+    private ProgressMonitor monitor;
 
     public void launch() {
         installerFile = new File(getAppData(), "adminpack-installer.jar");
+        monitor = new ProgressMonitor();
+        monitor.setMaximum(5);
 
         try {
             updateState(BootstrapState.UPDATE_CHECK);
@@ -66,6 +69,8 @@ public class Bootstrap {
         } catch (BootstrapException ex) {
             handleException(ex);
             System.exit(-1);
+        } finally {
+            monitor.close();
         }
     }
 
@@ -111,6 +116,7 @@ public class Bootstrap {
 
     private void updateState(BootstrapState state) {
         this.state = state;
+        this.monitor.next();
     }
 
     public static File getAppData() {

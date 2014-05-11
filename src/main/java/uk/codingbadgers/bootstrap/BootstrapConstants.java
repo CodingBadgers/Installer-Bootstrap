@@ -24,6 +24,8 @@ public final class BootstrapConstants {
     public static final String VENDOR;
 
     public static final String POPUP_TITLE = "Installer Bootstrap";
+    public static final String MONITOR_TITLE = "Launching ModPack Installer";
+    public static final String MONITOR_TEXT = "Setting up environment for installer";
 
     public static final String GITHUB_MIME_TYPE = "application/vnd.github.v3+json";
     public static final String ASSET_MIME_TYPE = "application/octet-stream";

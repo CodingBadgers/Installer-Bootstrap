@@ -24,10 +24,13 @@ import uk.codingbadgers.bootstrap.download.DownloadWorker;
 import java.util.concurrent.CountDownLatch;
 
 public class TaskDownload implements Task {
+
     @Override
     public void run(Bootstrap bootstrap) {
         int i = 0;
+
         CountDownLatch latch = new CountDownLatch(bootstrap.getDownloads().size());
+
 
         for (Download download : bootstrap.getDownloads()) {
             DownloadWorker worker = new DownloadWorker(download, latch);
@@ -42,4 +45,5 @@ public class TaskDownload implements Task {
 
         System.out.println("All downloads complete");
     }
+
 }
