@@ -39,7 +39,7 @@ public class Bootstrap {
         try {
             updateState(BootstrapState.UPDATE_CHECK);
             {
-                //runTask(TaskBootstrapUpdateCheck.class);
+                runTask(TaskBootstrapUpdateCheck.class);
                 runTask(TaskInstallerUpdateCheck.class);
             }
 
