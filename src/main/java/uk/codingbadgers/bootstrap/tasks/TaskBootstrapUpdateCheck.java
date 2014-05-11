@@ -32,6 +32,7 @@ import org.apache.http.util.EntityUtils;
 import uk.codingbadgers.bootstrap.BootstrapException;
 import uk.codingbadgers.bootstrap.Bootstrap;
 import uk.codingbadgers.bootstrap.BootstrapConstants;
+import uk.codingbadgers.bootstrap.utils.VersionComparator;
 
 import java.awt.*;
 import java.io.IOException;
@@ -55,8 +56,9 @@ public class TaskBootstrapUpdateCheck implements Task {
                 HttpEntity entity = response.getEntity();
                 JsonArray json = PARSER.parse(new InputStreamReader(entity.getContent())).getAsJsonArray();
                 JsonObject release = json.get(0).getAsJsonObject();
+                String version = release.get("name").getAsString();
 
-                if (BootstrapConstants.VERSION.equalsIgnoreCase(release.get("name").getAsString())) {
+                if (new VersionComparator().compare(BootstrapConstants.VERSION, version) < 0) {
                     System.out.println("Up to date bootstrap");
                 } else {
                     Desktop.getDesktop().browse(URI.create(release.get("html_url").getAsString()));

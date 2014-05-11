@@ -1,4 +1,6 @@
-package uk.codingbadgers.bootstrap;
+package uk.codingbadgers.bootstrap.utils;
+
+import uk.codingbadgers.bootstrap.BootstrapConstants;
 
 public class ProgressMonitor {
 
