@@ -42,7 +42,6 @@ public class TaskBuildClasspath implements Task {
         }
 
         URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), this.getClass().getClassLoader());
-        bootstrap.setClassLoader(classLoader);
         Thread.currentThread().setContextClassLoader(classLoader);
     }
 
