@@ -48,7 +48,7 @@ public class TaskLaunchInstaller implements Task {
             Class<?> launcher = loader.loadClass(mainclass);
 
             Method launch = bootstrapper.getMethod("launch", Class.class, String[].class);
-            launch.invoke(null, new Object[] { launcher, Main.getCliArgs() }); // TODO parse cli arguments
+            launch.invoke(null, new Object[] { launcher, Main.getCliArgs() });
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
