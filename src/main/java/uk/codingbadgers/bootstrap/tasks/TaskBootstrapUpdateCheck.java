@@ -21,9 +21,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import uk.codingbadgers.bootstrap.Bootstrap;
-import uk.codingbadgers.bootstrap.BootstrapConstants;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -32,8 +29,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
+import uk.codingbadgers.bootstrap.BootstrapException;
+import uk.codingbadgers.bootstrap.Bootstrap;
+import uk.codingbadgers.bootstrap.BootstrapConstants;
+
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 
 public class TaskBootstrapUpdateCheck implements Task {
 
@@ -56,7 +59,8 @@ public class TaskBootstrapUpdateCheck implements Task {
                 if (BootstrapConstants.VERSION.equalsIgnoreCase(release.get("name").getAsString())) {
                     System.out.println("Up to date bootstrap");
                 } else {
-                    System.err.println("Outdated bootstrap version " + release.get("name").getAsString() + " is latest");
+                    Desktop.getDesktop().browse(URI.create(release.get("html_url").getAsString()));
+                    throw new BootstrapException("Outdated bootstrap.\nPlease update your bootstrap.\n");
                 }
 
                 EntityUtils.consume(entity);

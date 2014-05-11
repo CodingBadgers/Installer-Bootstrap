@@ -31,7 +31,6 @@ public class Bootstrap {
     private BootstrapState state;
     private Map<DownloadType, Set<Download>> downloads = new HashMap<>();
     private File installerFile;
-    private URLClassLoader classLoader;
 
     public void launch() {
         installerFile = new File(getAppData(), "adminpack-installer.jar");
@@ -127,11 +126,4 @@ public class Bootstrap {
         }
     }
 
-    public void setClassLoader(URLClassLoader classLoader) {
-        this.classLoader = classLoader;
-    }
-
-    public URLClassLoader getClassLoader() {
-        return classLoader;
-    }
 }
