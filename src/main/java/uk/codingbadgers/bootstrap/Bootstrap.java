@@ -34,11 +34,13 @@ public class Bootstrap {
     private ProgressMonitor monitor;
 
     public void launch() {
-        installerFile = new File(getAppData(), "adminpack-installer.jar");
-        monitor = new ProgressMonitor();
-        monitor.setMaximum(5);
-
         try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+            installerFile = new File(getAppData(), "adminpack-installer.jar");
+            monitor = new ProgressMonitor();
+            monitor.setMaximum(5);
+
             updateState(BootstrapState.UPDATE_CHECK);
             {
                 runTask(TaskBootstrapUpdateCheck.class);
@@ -68,6 +70,9 @@ public class Bootstrap {
             updateState(BootstrapState.FINISHED);
         } catch (BootstrapException ex) {
             handleException(ex);
+            System.exit(2);
+        } catch (Exception ex) {
+            handleException(ex);
             System.exit(-1);
         } finally {
             monitor.close();
@@ -91,10 +96,6 @@ public class Bootstrap {
         }
 
         return downloads;
-    }
-
-    public Set<Download> getDownloads(DownloadType type) {
-        return downloads.get(type);
     }
 
     public void addDownload(DownloadType type, Download download) {
