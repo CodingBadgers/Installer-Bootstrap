@@ -1,0 +1,16 @@
+
+# Build files
+target/
+jars/
+dependency-reduced-pom.xml
+*.jar
+
+# Eclipse files
+.project
+.classpath
+
+# Idea files
+.idea/
+*.iml
+*-Release.zip
+SurvivalPlus/dependency-reduced-pom.xml
