@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive;
+package uk.codingbadgers.bootstrap;
 
-import io.github.thefishlive.download.Download;
-import io.github.thefishlive.download.DownloadType;
-import io.github.thefishlive.tasks.*;
+import uk.codingbadgers.bootstrap.download.Download;
+import uk.codingbadgers.bootstrap.download.DownloadType;
+import uk.codingbadgers.bootstrap.tasks.*;
 
 import javax.swing.*;
 import java.io.File;

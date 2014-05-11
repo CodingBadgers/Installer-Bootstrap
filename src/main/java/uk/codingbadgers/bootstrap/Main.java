@@ -15,28 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive.download;
+package uk.codingbadgers.bootstrap;
 
-import java.util.concurrent.CountDownLatch;
+public class Main {
 
-public class DownloadWorker implements Runnable {
+    private static String[] args;
 
-    private Download download;
-    private CountDownLatch latch;
+    public static void main(String[] args) {
+        Main.args = args;
 
-    public DownloadWorker(Download download, CountDownLatch latch) {
-        this.download = download;
-        this.latch = latch;
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.launch();
     }
 
-    public Download getDownload() {
-        return download;
-    }
-
-    @Override
-    public void run() {
-        getDownload().download();
-        latch.countDown();
+    public static String[] getCliArgs() {
+        return args;
     }
 
 }

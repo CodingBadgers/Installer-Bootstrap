@@ -15,21 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive;
+package uk.codingbadgers.bootstrap;
 
-public class Main {
+public enum BootstrapState {
 
-    private static String[] args;
+    UPDATE_CHECK,
 
-    public static void main(String[] args) {
-        Main.args = args;
+    LOAD_DEPENDENCIES,
 
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.launch();
-    }
+    DOWNLOAD,
 
-    public static String[] getCliArgs() {
-        return args;
-    }
+    SETUP_CLASSPATH,
+    START_INSTALLER,
 
+    FINISHED;
 }

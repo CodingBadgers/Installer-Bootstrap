@@ -15,14 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive.download;
+package uk.codingbadgers.bootstrap.download;
 
-import java.io.File;
-
-public interface Download {
-
-    public void download();
-
-    public File getLocalFile();
-
+public enum DownloadType {
+    INSTALLER,
+    LIBRARY;
 }

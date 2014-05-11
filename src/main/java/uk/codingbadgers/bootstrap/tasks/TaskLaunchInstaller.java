@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive.tasks;
+package uk.codingbadgers.bootstrap.tasks;
 
-import io.github.thefishlive.Bootstrap;
-import io.github.thefishlive.Main;
+import uk.codingbadgers.bootstrap.Bootstrap;
+import uk.codingbadgers.bootstrap.Main;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

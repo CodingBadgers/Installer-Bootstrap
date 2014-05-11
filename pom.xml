@@ -63,7 +63,7 @@
                     <archive>
                         <index>true</index>
                         <manifestEntries>
-                            <main-class>io.github.thefishlive.Main</main-class>
+                            <main-class>uk.codingbadgers.bootstrap.Main</main-class>
 
                             <Implementation-Title>${project.name}</Implementation-Title>
                             <Implementation-Vendor>${project.groupId}</Implementation-Vendor>

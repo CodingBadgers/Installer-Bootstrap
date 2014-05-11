@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive.tasks;
+package uk.codingbadgers.bootstrap.tasks;
 
-import io.github.thefishlive.Bootstrap;
-import io.github.thefishlive.BootstrapException;
-import io.github.thefishlive.download.Download;
-import io.github.thefishlive.download.DownloadType;
+import uk.codingbadgers.bootstrap.Bootstrap;
+import uk.codingbadgers.bootstrap.BootstrapException;
+import uk.codingbadgers.bootstrap.download.Download;
 
 import java.net.MalformedURLException;
 import java.net.URL;

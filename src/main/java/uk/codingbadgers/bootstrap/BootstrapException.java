@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive;
+package uk.codingbadgers.bootstrap;
 
 public class BootstrapException extends RuntimeException {
 

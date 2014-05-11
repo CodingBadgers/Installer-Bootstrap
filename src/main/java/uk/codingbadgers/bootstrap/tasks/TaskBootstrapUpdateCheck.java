@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive.tasks;
+package uk.codingbadgers.bootstrap.tasks;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import io.github.thefishlive.Bootstrap;
-import io.github.thefishlive.BootstrapConstants;
+import uk.codingbadgers.bootstrap.Bootstrap;
+import uk.codingbadgers.bootstrap.BootstrapConstants;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

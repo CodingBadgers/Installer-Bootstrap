@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.thefishlive.download;
+package uk.codingbadgers.bootstrap.download;
 
-import io.github.thefishlive.BootstrapException;
-import io.github.thefishlive.ChecksumGenerator;
+import uk.codingbadgers.bootstrap.BootstrapException;
+import uk.codingbadgers.bootstrap.ChecksumGenerator;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
