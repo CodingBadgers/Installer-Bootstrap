@@ -20,12 +20,11 @@ package uk.codingbadgers.bootstrap;
 public enum BootstrapState {
 
     UPDATE_CHECK,
-
     LOAD_DEPENDENCIES,
 
     DOWNLOAD,
 
-    SETUP_CLASSPATH,
+    SETUP_ENVIRONMENT,
     START_INSTALLER,
 
     FINISHED;

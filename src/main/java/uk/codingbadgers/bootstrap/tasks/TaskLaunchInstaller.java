@@ -17,6 +17,7 @@
  */
 package uk.codingbadgers.bootstrap.tasks;
 
+import io.github.thefishlive.bootstrap.Bootstrapper;
 import uk.codingbadgers.bootstrap.Bootstrap;
 import uk.codingbadgers.bootstrap.Main;
 
@@ -44,7 +45,7 @@ public class TaskLaunchInstaller implements Task {
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-            Class<?> bootstrapper = loader.loadClass("io.github.thefishlive.bootstrap.Bootstrapper");
+            Class<?> bootstrapper = loader.loadClass(Bootstrapper.class.getName());
             Class<?> launcher = loader.loadClass(mainclass);
 
             Method launch = bootstrapper.getMethod("launch", Class.class, String[].class);

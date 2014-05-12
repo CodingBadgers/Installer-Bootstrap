@@ -17,31 +17,47 @@
  */
 package uk.codingbadgers.bootstrap;
 
+import java.util.jar.Attributes.Name;
+
 public final class BootstrapConstants {
+
+    /* Bootstrap Version Constants*/
 
     public static final String NAME;
     public static final String VERSION;
     public static final String VENDOR;
-
-    public static final String POPUP_TITLE = "Installer Bootstrap";
-    public static final String MONITOR_TITLE = "Launching ModPack Installer";
-    public static final String MONITOR_TEXT = "Setting up environment for installer";
-
-    public static final String GITHUB_MIME_TYPE = "application/vnd.github.v3+json";
-    public static final String ASSET_MIME_TYPE = "application/octet-stream";
-
-    public static final String INSTALLER_LABEL = "ModPack-Installer.jar";
-    public static final String INSTALLER_LIBS_LABEL = "ModPack-Installer-Libs.json";
-
-    public static final String GITHUB_API = "https://api.github.com/";
-
-    public static final String BOOTSTRAP_UPDATE_URL = GITHUB_API + "repos/CodingBadgers/Installer-Bootstrap/releases";
-    public static final String INSTALLER_UPDATE_URL = GITHUB_API + "repos/CodingBadgers/ModPack-Installer/releases";
 
     static {
         NAME = BootstrapConstants.class.getPackage().getImplementationTitle();
         VENDOR = BootstrapConstants.class.getPackage().getImplementationVendor();
         VERSION = BootstrapConstants.class.getPackage().getImplementationVersion();
     }
+
+    /* UI Constants */
+
+    public static final String POPUP_TITLE = "Installer Bootstrap";
+    public static final String MONITOR_TITLE = "Launching ModPack Installer";
+    public static final String MONITOR_TEXT = "Setting up environment for installer";
+
+    /* Manifest Entry Constants */
+
+    public static final String MANIFEST_SECTION = "Bootstrap";
+    public static final Name MANIFEST_JAVA_VERSION = new Name("Java-Version");
+    public static final Name MANIFEST_JAVA_CLASS_VERSION = new Name("Java-Class-Version");
+
+    public static final String PROPERTY_JAVA_VERSION = "java.version";
+    public static final String PROPERTY_JAVA_CLASS_VERSION = "java.class.version";
+
+    /* Github Api Constants */
+
+    public static final String GITHUB_API = "https://api.github.com/";
+    public static final String GITHUB_MIME_TYPE = "application/vnd.github.v3+json";
+    public static final String ASSET_MIME_TYPE = "application/octet-stream";
+
+    public static final String INSTALLER_LABEL = "ModPack-Installer.jar";
+    public static final String INSTALLER_LIBS_LABEL = "ModPack-Installer-Libs.json";
+
+    public static final String BOOTSTRAP_UPDATE_URL = GITHUB_API + "repos/CodingBadgers/Installer-Bootstrap/releases";
+    public static final String INSTALLER_UPDATE_URL = GITHUB_API + "repos/CodingBadgers/ModPack-Installer/releases";
 
 }

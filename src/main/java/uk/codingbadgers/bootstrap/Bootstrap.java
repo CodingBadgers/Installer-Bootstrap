@@ -19,11 +19,11 @@ package uk.codingbadgers.bootstrap;
 
 import uk.codingbadgers.bootstrap.download.Download;
 import uk.codingbadgers.bootstrap.download.DownloadType;
+import uk.codingbadgers.bootstrap.utils.ProgressMonitor;
 import uk.codingbadgers.bootstrap.tasks.*;
 
 import javax.swing.*;
 import java.io.File;
-import java.net.URLClassLoader;
 import java.util.*;
 
 public class Bootstrap {
@@ -43,10 +43,9 @@ public class Bootstrap {
 
             updateState(BootstrapState.UPDATE_CHECK);
             {
-                runTask(TaskBootstrapUpdateCheck.class);
+                //runTask(TaskBootstrapUpdateCheck.class);
                 runTask(TaskInstallerUpdateCheck.class);
             }
-
             updateState(BootstrapState.LOAD_DEPENDENCIES);
             {
                 runTask(TaskLoadDependencies.class);
@@ -57,8 +56,9 @@ public class Bootstrap {
                 runTask(TaskDownload.class);
             }
 
-            updateState(BootstrapState.SETUP_CLASSPATH);
+            updateState(BootstrapState.SETUP_ENVIRONMENT);
             {
+                runTask(TaskCheckJavaVersion.class);
                 runTask(TaskBuildClasspath.class);
             }
 
