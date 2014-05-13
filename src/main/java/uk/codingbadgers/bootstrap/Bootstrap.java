@@ -29,7 +29,7 @@ import java.util.*;
 public class Bootstrap {
 
     private BootstrapState state;
-    private Map<DownloadType, Set<Download>> downloads = new HashMap<>();
+    private Map<DownloadType, Set<Download>> downloads = new HashMap<DownloadType, Set<Download>>();
     private File installerFile;
     private ProgressMonitor monitor;
 
@@ -89,7 +89,7 @@ public class Bootstrap {
     }
 
     public Set<Download> getDownloads() {
-        Set<Download> downloads = new HashSet<>();
+        Set<Download> downloads = new HashSet<Download>();
 
         for (Set<Download> entry : this.downloads.values()) {
             downloads.addAll(entry);
@@ -102,7 +102,7 @@ public class Bootstrap {
         if (this.downloads.containsKey(type)) {
             this.downloads.get(type).add(download);
         } else {
-            this.downloads.put(type, new HashSet<> (Arrays.asList(download)));
+            this.downloads.put(type, new HashSet<Download>(Arrays.asList(download)));
         }
     }
 

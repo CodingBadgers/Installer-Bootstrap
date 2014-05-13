@@ -43,7 +43,9 @@ public class ChecksumGenerator {
         try {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
             return createHash(file, digest);
-        } catch(IOException | NoSuchAlgorithmException ex) {
+        } catch (IOException ex){
+            throw new RuntimeException(ex);
+        } catch (NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
         }
 	}
