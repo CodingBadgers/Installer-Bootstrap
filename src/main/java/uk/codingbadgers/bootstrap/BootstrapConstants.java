@@ -26,11 +26,28 @@ public final class BootstrapConstants {
     public static final String NAME;
     public static final String VERSION;
     public static final String VENDOR;
+    public static final boolean DEV;
 
     static {
-        NAME = BootstrapConstants.class.getPackage().getImplementationTitle();
-        VENDOR = BootstrapConstants.class.getPackage().getImplementationVendor();
-        VERSION = BootstrapConstants.class.getPackage().getImplementationVersion();
+        if (BootstrapConstants.class.getPackage().getImplementationTitle() != null) {
+            NAME = BootstrapConstants.class.getPackage().getImplementationTitle();
+            DEV = false;
+        } else {
+            NAME = "installer-boostrap-dev";
+            DEV = true;
+        }
+
+        if (BootstrapConstants.class.getPackage().getImplementationVendor() != null) {
+            VENDOR = BootstrapConstants.class.getPackage().getImplementationVendor();
+        } else {
+            VENDOR = "uk.codingbadgers";
+        }
+
+        if (BootstrapConstants.class.getPackage().getImplementationVersion() != null) {
+            VERSION = BootstrapConstants.class.getPackage().getImplementationVersion();
+        } else {
+            VERSION = "dev-SNAPSHOT";
+        }
     }
 
     /* UI Constants */

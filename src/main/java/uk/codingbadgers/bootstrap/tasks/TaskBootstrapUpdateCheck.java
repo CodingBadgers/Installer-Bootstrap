@@ -58,7 +58,7 @@ public class TaskBootstrapUpdateCheck implements Task {
                 JsonObject release = json.get(0).getAsJsonObject();
                 String version = release.get("name").getAsString();
 
-                if (new VersionComparator().compare(BootstrapConstants.VERSION, version) < 0) {
+                if (new VersionComparator().compare(BootstrapConstants.VERSION, version) >= 0) {
                     System.out.println("Up to date bootstrap");
                 } else {
                     Desktop.getDesktop().browse(URI.create(release.get("html_url").getAsString()));

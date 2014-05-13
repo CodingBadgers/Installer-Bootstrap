@@ -43,7 +43,7 @@ public class Bootstrap {
 
             updateState(BootstrapState.UPDATE_CHECK);
             {
-                //runTask(TaskBootstrapUpdateCheck.class);
+                runTask(TaskBootstrapUpdateCheck.class);
                 runTask(TaskInstallerUpdateCheck.class);
             }
             updateState(BootstrapState.LOAD_DEPENDENCIES);

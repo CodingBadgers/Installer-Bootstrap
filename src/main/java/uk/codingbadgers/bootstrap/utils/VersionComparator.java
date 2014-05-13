@@ -17,14 +17,16 @@
  */
 package uk.codingbadgers.bootstrap.utils;
 
+import uk.codingbadgers.bootstrap.BootstrapConstants;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class VersionComparator implements Comparator<String> {
 
-    private static final int LESS_THAN = -1;
+    private static final int UPDATE = -1;
     private static final int EQUAL = 0;
-    private static final int GREATER_THAN = 1;
+    private static final int DEV_BUILD = 1;
 
     @Override
     public int compare(String local, String remote) {
@@ -33,6 +35,10 @@ public class VersionComparator implements Comparator<String> {
         }
         if (remote == null) {
             throw new IllegalArgumentException("Remote version cannot be null");
+        }
+
+        if (BootstrapConstants.DEV || local.equals("dev-SNAPSHOT")) {
+            return EQUAL;
         }
 
         boolean localSnapshot = local.contains("-SNAPSHOT");
@@ -65,14 +71,14 @@ public class VersionComparator implements Comparator<String> {
             int remotePart = Integer.parseInt(remoteSplit[i]);
 
             if (localPart < remotePart) {
-                return LESS_THAN; // UPDATE NOW
+                return UPDATE; // UPDATE NOW
             } else if (localPart > remotePart){
-                return GREATER_THAN; // DEV BUILD
+                return DEV_BUILD; // DEV BUILD
             }
         }
 
         if (localSnapshot) {
-            return LESS_THAN;
+            return UPDATE;
         }
 
         return EQUAL;
