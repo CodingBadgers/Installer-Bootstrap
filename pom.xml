@@ -6,7 +6,7 @@
 
     <groupId>io.github.thefishlive</groupId>
     <artifactId>installer-bootstrap</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>Installer-Bootstrap</name>
 
     <properties>
