@@ -29,6 +29,7 @@ import uk.codingbadgers.bootstrap.download.Sha1Download;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

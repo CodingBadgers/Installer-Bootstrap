@@ -24,28 +24,44 @@ import uk.codingbadgers.bootstrap.tasks.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Bootstrap {
 
-    private BootstrapState state;
+    private static final File installerFile;
+
     private Map<DownloadType, Set<Download>> downloads = new HashMap<DownloadType, Set<Download>>();
-    private File installerFile;
+    private final ReadWriteLock downloadsLock = new ReentrantReadWriteLock();
+
+    private BootstrapState state;
     private ProgressMonitor monitor;
+    private int threadcount;
+
+    static {
+        installerFile = new File(getAppData(), "adminpack-installer.jar");
+    }
 
     public void launch() {
         try {
+            long time = System.nanoTime();
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-            installerFile = new File(getAppData(), "adminpack-installer.jar");
             monitor = new ProgressMonitor();
             monitor.setMaximum(5);
 
             updateState(BootstrapState.UPDATE_CHECK);
             {
-                runTask(TaskBootstrapUpdateCheck.class);
-                runTask(TaskInstallerUpdateCheck.class);
+                CountDownLatch latch = new CountDownLatch(2);
+                runTask(TaskBootstrapUpdateCheck.class, latch);
+                runTask(TaskInstallerUpdateCheck.class, latch);
+                latch.await();
             }
+
             updateState(BootstrapState.LOAD_DEPENDENCIES);
             {
                 runTask(TaskLoadDependencies.class);
@@ -62,6 +78,7 @@ public class Bootstrap {
                 runTask(TaskBuildClasspath.class);
             }
 
+            System.out.println("Took " + ((System.nanoTime() - time) / 1000000f) + "ms to launch installer");
             updateState(BootstrapState.START_INSTALLER);
             {
                 runTask(TaskLaunchInstaller.class);
@@ -79,6 +96,23 @@ public class Bootstrap {
         }
     }
 
+    private void runTask(final Class<? extends AsyncTask> clazz, final CountDownLatch latch) {
+        final Bootstrap instance = this;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Constructor<? extends AsyncTask> ctor = clazz.getConstructor(CountDownLatch.class);
+                    AsyncTask task = ctor.newInstance(latch);
+                    task.execute(instance);
+                } catch (ReflectiveOperationException e) {
+                    handleException(e);
+                }
+            }
+        }, "task-execute-" + threadcount++).start();
+    }
+
     public void runTask(Class<? extends Task> clazz) {
         try {
             Task task = clazz.newInstance();
@@ -89,20 +123,44 @@ public class Bootstrap {
     }
 
     public Set<Download> getDownloads() {
-        Set<Download> downloads = new HashSet<Download>();
+        Lock read = this.downloadsLock.readLock();
+        read.lock();
 
-        for (Set<Download> entry : this.downloads.values()) {
-            downloads.addAll(entry);
+        try {
+            Set<Download> downloads = new HashSet<Download>();
+
+            for (Set<Download> entry : this.downloads.values()) {
+                downloads.addAll(entry);
+            }
+            return downloads;
+        } finally {
+            read.unlock();
         }
+    }
 
-        return downloads;
+    public Set<Download> getDownloads(DownloadType type) {
+        Lock read = this.downloadsLock.readLock();
+        read.lock();
+
+        try {
+            return new HashSet<Download>(this.downloads.get(type));
+        } finally {
+            read.unlock();
+        }
     }
 
     public void addDownload(DownloadType type, Download download) {
-        if (this.downloads.containsKey(type)) {
-            this.downloads.get(type).add(download);
-        } else {
-            this.downloads.put(type, new HashSet<Download>(Arrays.asList(download)));
+        Lock write = this.downloadsLock.writeLock();
+        write.lock();
+
+        try {
+            if (this.downloads.containsKey(type)) {
+                this.downloads.get(type).add(download);
+            } else {
+                this.downloads.put(type, new HashSet<Download>(Arrays.asList(download)));
+            }
+        } finally {
+            write.unlock();
         }
     }
 
@@ -132,5 +190,4 @@ public class Bootstrap {
             return new File(new File(userHomeDir), ".minecraft");
         }
     }
-
 }

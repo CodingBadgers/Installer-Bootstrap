@@ -20,6 +20,7 @@ package uk.codingbadgers.bootstrap.tasks;
 import uk.codingbadgers.bootstrap.Bootstrap;
 import uk.codingbadgers.bootstrap.BootstrapException;
 import uk.codingbadgers.bootstrap.download.Download;
+import uk.codingbadgers.bootstrap.download.DownloadType;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,12 +34,18 @@ public class TaskBuildClasspath implements Task {
     public void run(Bootstrap bootstrap) {
         List<URL> urls = new ArrayList<URL>();
 
-        for (Download download : bootstrap.getDownloads()) {
+        for (Download download : bootstrap.getDownloads(DownloadType.LIBRARY)) {
             try {
                 urls.add(download.getLocalFile().toURI().toURL());
             } catch (MalformedURLException e) {
                 throw new BootstrapException(e);
             }
+        }
+
+        try {
+            urls.add(bootstrap.getInstallerFile().toURI().toURL());
+        } catch (MalformedURLException e) {
+            throw new BootstrapException(e);
         }
 
         URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), this.getClass().getClassLoader());

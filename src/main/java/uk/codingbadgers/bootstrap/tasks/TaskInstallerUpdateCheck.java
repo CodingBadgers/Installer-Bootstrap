@@ -17,12 +17,10 @@
  */
 package uk.codingbadgers.bootstrap.tasks;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import uk.codingbadgers.bootstrap.Bootstrap;
+import uk.codingbadgers.bootstrap.BootstrapConstants;
 import uk.codingbadgers.bootstrap.BootstrapException;
 import uk.codingbadgers.bootstrap.download.DownloadType;
 import uk.codingbadgers.bootstrap.download.EtagDownload;
@@ -36,14 +34,27 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import uk.codingbadgers.bootstrap.utils.VersionComparator;
 
 import java.io.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import static uk.codingbadgers.bootstrap.BootstrapConstants.*;
 
-public class TaskInstallerUpdateCheck implements Task {
+public class TaskInstallerUpdateCheck extends AsyncTask {
 
     private static final JsonParser PARSER = new JsonParser();
+
+    public TaskInstallerUpdateCheck() {
+        super(null);
+    }
+
+    public TaskInstallerUpdateCheck(CountDownLatch latch) {
+        super(latch);
+    }
 
     @Override
     public void run(Bootstrap bootstrap) {
@@ -58,6 +69,13 @@ public class TaskInstallerUpdateCheck implements Task {
 
             if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
                 HttpEntity entity = response.getEntity();
+
+                String localVersion = null;
+
+                if (bootstrap.getInstallerFile().exists()) {
+                    Manifest manifest = new JarFile(bootstrap.getInstallerFile()).getManifest();
+                    localVersion = manifest.getMainAttributes().getValue(Attributes.Name.IMPLEMENTATION_VERSION);
+                }
 
                 JsonArray json = PARSER.parse(new InputStreamReader(entity.getContent())).getAsJsonArray();
                 JsonObject release = json.get(0).getAsJsonObject();
@@ -75,8 +93,62 @@ public class TaskInstallerUpdateCheck implements Task {
                     }
                 }
 
-                bootstrap.addDownload(DownloadType.INSTALLER, new EtagDownload(installerAsset.get("url").getAsString(), bootstrap.getInstallerFile()));
-                new EtagDownload(librariesAsset.get("url").getAsString(), new File(bootstrap.getInstallerFile() + ".libs")).download(); // Has to be downloaded before next task can be run
+                if (VersionComparator.getInstance().compare(localVersion, release.get("name").getAsString()) < 0) {
+                    bootstrap.addDownload(DownloadType.INSTALLER, new EtagDownload(installerAsset.get("url").getAsString(), bootstrap.getInstallerFile()));
+                    localVersion = release.get("name").getAsString();
+                }
+
+                File libs = new File(bootstrap.getInstallerFile() + ".libs");
+                boolean update = true;
+
+                if (libs.exists()) {
+                    FileReader reader = null;
+
+                    try {
+                        reader = new FileReader(libs);
+                        JsonElement parsed = PARSER.parse(reader);
+
+                        if (parsed.isJsonObject()) {
+                            JsonObject libsJson = parsed.getAsJsonObject();
+
+                            if (libsJson.has("installer")) {
+                                JsonObject installerJson = libsJson.get("installer").getAsJsonObject();
+                                if (installerJson.get("version").getAsString().equals(localVersion)) {
+                                    update = false;
+                                }
+                            }
+                        }
+                    } catch (JsonParseException ex) {
+                        throw new BootstrapException(ex);
+                    } finally {
+                        reader.close();
+                    }
+                }
+
+                if (update) {
+                    new EtagDownload(librariesAsset.get("url").getAsString(), new File(bootstrap.getInstallerFile() + ".libs")).download();
+
+                    FileReader reader = null;
+                    FileWriter writer = null;
+
+                    try {
+                        reader = new FileReader(libs);
+                        JsonObject libsJson = PARSER.parse(reader).getAsJsonObject();
+
+                        JsonObject versionJson = new JsonObject();
+                        versionJson.add("version", new JsonPrimitive(localVersion));
+
+                        libsJson.add("installer", versionJson);
+                        writer = new FileWriter(libs);
+                        new Gson().toJson(libsJson, writer);
+                    } catch(JsonParseException ex) {
+                        throw new BootstrapException(ex);
+                    } finally {
+                        reader.close();
+                        writer.close();
+                    }
+                }
+
                 EntityUtils.consume(entity);
             } else {
                 throw new BootstrapException("Error sending request to github. Error " + statusLine.getStatusCode() + statusLine.getReasonPhrase());

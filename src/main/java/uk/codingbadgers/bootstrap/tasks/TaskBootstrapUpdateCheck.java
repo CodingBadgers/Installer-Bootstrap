@@ -38,10 +38,19 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 
-public class TaskBootstrapUpdateCheck implements Task {
+public class TaskBootstrapUpdateCheck extends AsyncTask {
 
     private static final JsonParser PARSER = new JsonParser();
+
+    public TaskBootstrapUpdateCheck() {
+        super(null);
+    }
+
+    public TaskBootstrapUpdateCheck(CountDownLatch latch) {
+        super(latch);
+    }
 
     @Override
     public void run(Bootstrap bootstrap) {
@@ -58,7 +67,7 @@ public class TaskBootstrapUpdateCheck implements Task {
                 JsonObject release = json.get(0).getAsJsonObject();
                 String version = release.get("name").getAsString();
 
-                if (new VersionComparator().compare(BootstrapConstants.VERSION, version) >= 0) {
+                if (VersionComparator.getInstance().compare(BootstrapConstants.VERSION, version) >= 0) {
                     System.out.println("Up to date bootstrap");
                 } else {
                     Desktop.getDesktop().browse(URI.create(release.get("html_url").getAsString()));

@@ -28,6 +28,15 @@ public class VersionComparator implements Comparator<String> {
     private static final int EQUAL = 0;
     private static final int DEV_BUILD = 1;
 
+    private static VersionComparator instance = null;
+
+    public static VersionComparator getInstance() {
+        if (instance == null) {
+            instance = new VersionComparator();
+        }
+        return instance;
+    }
+
     @Override
     public int compare(String local, String remote) {
         if (local == null) {
