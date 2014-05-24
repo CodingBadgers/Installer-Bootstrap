@@ -46,8 +46,8 @@ public class VersionComparator implements Comparator<String> {
             throw new IllegalArgumentException("Remote version cannot be null");
         }
 
-        if (BootstrapConstants.DEV || local.equals("dev-SNAPSHOT")) {
-            return EQUAL;
+        if (BootstrapConstants.DEV || local.equals(BootstrapConstants.DEV_BUILD_VERSION)) {
+            return DEV_BUILD;
         }
 
         boolean localSnapshot = local.contains("-SNAPSHOT");

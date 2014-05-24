@@ -26,7 +26,9 @@ public final class BootstrapConstants {
     public static final String NAME;
     public static final String VERSION;
     public static final String VENDOR;
+
     public static final boolean DEV;
+    public static final String DEV_BUILD_VERSION = "dev-SNAPSHOT";
 
     static {
         if (BootstrapConstants.class.getPackage().getImplementationTitle() != null) {
@@ -46,7 +48,7 @@ public final class BootstrapConstants {
         if (BootstrapConstants.class.getPackage().getImplementationVersion() != null) {
             VERSION = BootstrapConstants.class.getPackage().getImplementationVersion();
         } else {
-            VERSION = "dev-SNAPSHOT";
+            VERSION = DEV_BUILD_VERSION;
         }
     }
 
