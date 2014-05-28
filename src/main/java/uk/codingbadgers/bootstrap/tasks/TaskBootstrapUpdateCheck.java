@@ -23,6 +23,7 @@ import com.google.gson.JsonParser;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
@@ -75,6 +76,8 @@ public class TaskBootstrapUpdateCheck extends AsyncTask {
                 }
 
                 EntityUtils.consume(entity);
+            } else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN) {
+                System.err.println("Hit rate limit, skipping update check");
             } else {
                 System.err.println("Error sending request to github. Error " + response.getStatusLine().getStatusCode());
             }

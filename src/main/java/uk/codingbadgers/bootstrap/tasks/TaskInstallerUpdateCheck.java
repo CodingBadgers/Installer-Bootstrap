@@ -73,8 +73,10 @@ public class TaskInstallerUpdateCheck extends AsyncTask {
                 String localVersion = null;
 
                 if (bootstrap.getInstallerFile().exists()) {
-                    Manifest manifest = new JarFile(bootstrap.getInstallerFile()).getManifest();
+                    JarFile jar = new JarFile(bootstrap.getInstallerFile());
+                    Manifest manifest = jar.getManifest();
                     localVersion = manifest.getMainAttributes().getValue(Attributes.Name.IMPLEMENTATION_VERSION);
+                    jar.close();
                 }
 
                 JsonArray json = PARSER.parse(new InputStreamReader(entity.getContent())).getAsJsonArray();
@@ -141,7 +143,7 @@ public class TaskInstallerUpdateCheck extends AsyncTask {
                         libsJson.add("installer", versionJson);
                         writer = new FileWriter(libs);
                         new Gson().toJson(libsJson, writer);
-                    } catch(JsonParseException ex) {
+                    } catch (JsonParseException ex) {
                         throw new BootstrapException(ex);
                     } finally {
                         reader.close();
@@ -150,6 +152,8 @@ public class TaskInstallerUpdateCheck extends AsyncTask {
                 }
 
                 EntityUtils.consume(entity);
+            } else if (statusLine.getStatusCode() == HttpStatus.SC_FORBIDDEN) {
+                System.err.println("Hit rate limit, skipping update check");
             } else {
                 throw new BootstrapException("Error sending request to github. Error " + statusLine.getStatusCode() + statusLine.getReasonPhrase());
             }
