@@ -27,6 +27,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -40,7 +41,7 @@ public class Bootstrap {
 
     private BootstrapState state;
     private ProgressMonitor monitor;
-    private int threadcount;
+    private AtomicInteger threadcount;
 
     static {
         installerFile = new File(getAppData(), "adminpack-installer.jar");
@@ -110,7 +111,7 @@ public class Bootstrap {
                     handleException(e);
                 }
             }
-        }, "task-execute-" + threadcount++).start();
+        }, "task-execute-" + threadcount.getAndIncrement()).start();
     }
 
     public void runTask(Class<? extends Task> clazz) {
